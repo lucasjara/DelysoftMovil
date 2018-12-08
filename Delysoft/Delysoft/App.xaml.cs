@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Delysoft.Apps;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,8 +11,7 @@ namespace Delysoft
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            MainPage = new Login();
         }
 
         protected override void OnStart()
