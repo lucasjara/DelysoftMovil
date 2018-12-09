@@ -1,4 +1,5 @@
-﻿using ImageCircle.Forms.Plugin.Abstractions;
+﻿using Delysoft.Apps.Usuario;
+using ImageCircle.Forms.Plugin.Abstractions;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,10 @@ namespace Delysoft.Apps
                 {
                     // Obtenemos el ID
                     var id = respuesta[2].ToString();
-                    await DisplayAlert("LOGIN", "Todo bien con el id: " + id, "OK");
-                    //await Navigation.PushModalAsync(new PaginaMaestra("5", foo, ped));
+                    var origen = "Login";
+
+                    //await DisplayAlert("LOGIN", "Todo bien con el id: " + id, "OK");
+                    await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, null,null));
                 }
                 else
                 {
