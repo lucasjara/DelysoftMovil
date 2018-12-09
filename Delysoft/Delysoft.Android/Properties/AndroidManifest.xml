@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.Delysoft">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="27" />
-    <application android:label="Delysoft.Android"></application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.location" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <application android:label="Delysoft.Android">
+      <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBh9MMEN9P5ZOj1U5HhuFu9NP6V1PsTKJA" />
+      <receiver android:name="com.onesignal.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+        <intent-filter>
+          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+          <category android:name="com.companyname.Delysoft" />
+        </intent-filter>
+      </receiver>
+    </application>
+  <permission android:name="com.companyname.Delysoft.permission.C2D_MESSAGE"
+            android:protectionLevel="signature" />
+  <uses-permission android:name="com.companyname.Delysoft.permission.C2D_MESSAGE" />
 </manifest>

@@ -32,6 +32,8 @@ namespace Delysoft.Apps
             ent_userpass.Completed += (object sender, EventArgs e) => { cmdIniciarSesion.Focus(); };
             cmdIniciarSesion.Clicked += async (sender, e) =>
             {
+                await Navigation.PushModalAsync(new PaginaMaestraUsuario("Login", null, null));
+                /*
                 MetodosApi api = new MetodosApi();
 
                 string username = ent_username.Text;
@@ -51,6 +53,7 @@ namespace Delysoft.Apps
                 {
                     await DisplayAlert("LOGIN", respuesta[1].ToString(), "OK");
                 }
+                */
             };
             ent_userpass.Completed += (object sender, EventArgs e) =>
             {

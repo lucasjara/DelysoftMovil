@@ -16,6 +16,7 @@ namespace Delysoft.Apps.Usuario.Tabs
     public class ListadoOfertas : ContentPage
     {
         public ObservableCollection<ProductoViewModel> producto { get; set; }
+
         public ListadoOfertas()
         {
             var stack = new StackLayout { Spacing = 0 };
@@ -36,6 +37,7 @@ namespace Delysoft.Apps.Usuario.Tabs
                 try
                 {
                     var location = await Geolocation.GetLastKnownLocationAsync();
+
                     var latitude = location.Latitude;
                     var longitud = location.Longitude;
                     // await DisplayAlert("Alerta", "Latitud: " + latitude.ToString() + " - Longitud" + longitud.ToString(), "OK");
@@ -89,11 +91,12 @@ namespace Delysoft.Apps.Usuario.Tabs
         async void OnTapAsync(object sender, ItemTappedEventArgs e)
         {
             if (e.Item == null) return;
+
             Task.Delay(500);
             // Deseleccionar Item
             if (sender is ListView lv) lv.SelectedItem = null;
+
             var foo = e.Item as ProductoViewModel;
-            var ped = new PedidoViewModel();
             var origen = "VistaPrevia";
             await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, foo, null));
         }

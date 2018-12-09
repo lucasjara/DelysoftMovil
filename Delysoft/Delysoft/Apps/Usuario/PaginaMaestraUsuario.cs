@@ -27,7 +27,9 @@ namespace Delysoft.Apps.Usuario
         {
             masterPage = new MasterPage();
             Master = masterPage;
-            switch (origen) {
+
+            switch (origen)
+            {
                 case "Login":case "Cambio":
                     Detail = new NavigationPage(new TabsUser());
                     break;
@@ -40,7 +42,6 @@ namespace Delysoft.Apps.Usuario
                 default:
                     break;
             }
-
             /*
             else if (origen == "1")
             {

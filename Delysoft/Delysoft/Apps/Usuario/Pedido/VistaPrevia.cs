@@ -16,7 +16,6 @@ namespace Delysoft.Apps.Usuario.Pedido
 
         Label lbl_valor_Total = new Label { FontSize = 20 };
         Label lbl_cantidad_total = new Label { Text = "1" };
-        private object prod;
 
         public VistaPrevia(ProductoViewModel prod)
         {
@@ -136,8 +135,6 @@ namespace Delysoft.Apps.Usuario.Pedido
                     if (respuesta[0].ToString() == "S")
                     {
                         var jsonString = JArray.Parse(respuesta[2].ToString());
-                        //await DisplayAlert("Alerta", jsonString, "OK");
-
                         var pedido = new PedidoViewModel();
 
                         foreach (JObject item in jsonString)
@@ -187,15 +184,9 @@ namespace Delysoft.Apps.Usuario.Pedido
             var contentView = new ContentView
             {
                 Content = stack_general,
-                // ControlTemplate = pruebatemplate,
                 BackgroundColor = Color.FromHex("#E9E9E9")
             };
             Content = contentView;
-        }
-
-        public VistaPrevia(object prod)
-        {
-            this.prod = prod;
         }
 
         void switcher_Toggled(object sender, ToggledEventArgs e)

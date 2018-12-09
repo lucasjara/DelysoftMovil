@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Delysoft.Apps.Usuario.Pedido;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,14 +29,14 @@ namespace Delysoft.Apps.Usuario
                 IconSource = "menu_100x100.png",
                 TargetType = typeof(RecargaUsuario)
             });
-            /*
+            
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Historial de Pedidos",
                 IconSource = "notificaciones2_100x100.png",
                 TargetType = typeof(HistorialPedidos)
             });
-            */
+            
             listView = new ListView
             {
                 ItemsSource = masterPageItems,

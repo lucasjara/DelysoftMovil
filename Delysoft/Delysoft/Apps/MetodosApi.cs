@@ -85,5 +85,51 @@ namespace Delysoft.Apps
             }
             return respuestaString;
         }
+        /*
+         *  Metodo para obtener el historial de pedido del usuario
+         */
+        public string ObtenerHistorialPedidos(string id)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_listado_historico_usuario");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+         * Listado de Locales Favoritos del Usuario
+         */ 
+        public string ObtenerListadoLocalesFavoritos(string id)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_listado_locales_favoritos");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id },
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
     }
 }
