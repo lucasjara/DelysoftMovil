@@ -38,8 +38,8 @@ namespace Delysoft.Apps.Usuario.Tabs
                     var location = await Geolocation.GetLastKnownLocationAsync();
                     var latitude = location.Latitude;
                     var longitud = location.Longitude;
+                    // await DisplayAlert("Alerta", "Latitud: " + latitude.ToString() + " - Longitud" + longitud.ToString(), "OK");
                     MetodosApi api = new MetodosApi();
-                    
                     var respuesta = JArray.Parse(api.ObtenerListadoProductosDisponibles(id, latitude, longitud));
                     if (respuesta[0].ToString() == "S")
                     {
