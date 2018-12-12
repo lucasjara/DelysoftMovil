@@ -23,7 +23,7 @@ namespace Delysoft.Apps.Usuario.Tabs
             producto = new ObservableCollection<ProductoViewModel>();
             ListView lstView = new ListView();
             // ID que debemos obtener de la app
-            string id = "1";
+            string id = Application.Current.Properties["id"] as string;
             Button cmdProductosZona = new Button
             {
                 Text = "Obtener Ofertas Disponibles",
@@ -36,12 +36,12 @@ namespace Delysoft.Apps.Usuario.Tabs
             {
                 try
                 {
-                    var location = await Geolocation.GetLastKnownLocationAsync();
+                    MetodosApi api = new MetodosApi();
 
+                    var location = await Geolocation.GetLastKnownLocationAsync();
                     var latitude = location.Latitude;
                     var longitud = location.Longitude;
-                    // await DisplayAlert("Alerta", "Latitud: " + latitude.ToString() + " - Longitud" + longitud.ToString(), "OK");
-                    MetodosApi api = new MetodosApi();
+                    
                     var respuesta = JArray.Parse(api.ObtenerListadoProductosDisponibles(id, latitude, longitud));
                     if (respuesta[0].ToString() == "S")
                     {

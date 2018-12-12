@@ -17,5 +17,7 @@ namespace Delysoft.Apps.Usuario.Pedido.Model
         public string Fecha { get; set; }
         public string Imagen { get; set; }
         public string Observacion { get; set; }
+        public string Longitud { get; set; }
+        public string Latitud { get; set; }
     }
 }

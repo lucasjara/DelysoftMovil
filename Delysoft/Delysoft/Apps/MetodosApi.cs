@@ -131,5 +131,28 @@ namespace Delysoft.Apps
             }
             return respuestaString;
         }
+        /*
+          *  Metodo para obtener los pedidos activos
+         */
+        public string ObtenerPedidosActivos(string id)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_listado_pedidos_activos_usuario");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
     }
 }

@@ -131,7 +131,8 @@ namespace Delysoft.Apps.Usuario.Pedido
                     var latitude = location.Latitude;
                     var longitud = location.Longitude;
                     MetodosApi api = new MetodosApi();
-                    var respuesta = JArray.Parse(api.EnviarDatosPedido("1", lbl_cantidad_total.Text, prod.Id, "", latitude, longitud));
+                    string id = Application.Current.Properties["id"] as string;
+                    var respuesta = JArray.Parse(api.EnviarDatosPedido(id, lbl_cantidad_total.Text, prod.Id, "", latitude, longitud));
                     if (respuesta[0].ToString() == "S")
                     {
                         var jsonString = JArray.Parse(respuesta[2].ToString());

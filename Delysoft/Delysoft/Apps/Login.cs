@@ -32,8 +32,6 @@ namespace Delysoft.Apps
             ent_userpass.Completed += (object sender, EventArgs e) => { cmdIniciarSesion.Focus(); };
             cmdIniciarSesion.Clicked += async (sender, e) =>
             {
-                await Navigation.PushModalAsync(new PaginaMaestraUsuario("Login", null, null));
-                /*
                 MetodosApi api = new MetodosApi();
 
                 string username = ent_username.Text;
@@ -43,17 +41,16 @@ namespace Delysoft.Apps
                 if (respuesta[0].ToString() == "S")
                 {
                     // Obtenemos el ID
-                    var id = respuesta[2].ToString();
+                    Application.Current.Properties["id"]= respuesta[2].ToString();
                     var origen = "Login";
 
-                    //await DisplayAlert("LOGIN", "Todo bien con el id: " + id, "OK");
                     await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, null,null));
                 }
                 else
                 {
                     await DisplayAlert("LOGIN", respuesta[1].ToString(), "OK");
                 }
-                */
+                
             };
             ent_userpass.Completed += (object sender, EventArgs e) =>
             {

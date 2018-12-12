@@ -18,7 +18,7 @@ namespace Delysoft.Apps.Usuario.Tabs
             local = new ObservableCollection<LocalViewModel>();
             ListView lstView = new ListView();
             // ID que debemos obtener de la app
-            string id = "1";
+            string id = Application.Current.Properties["id"] as string;
             MetodosApi api = new MetodosApi();
             var respuesta = JArray.Parse(api.ObtenerListadoLocalesFavoritos(id));
             if (respuesta[0].ToString() == "S")
