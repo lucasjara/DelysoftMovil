@@ -30,7 +30,8 @@ namespace Delysoft.Apps.Usuario
 
             switch (origen)
             {
-                case "Login":case "Cambio":
+                case "Login":
+                case "Cambio":
                     Detail = new NavigationPage(new TabsUser());
                     break;
                 case "VistaPrevia":
@@ -42,28 +43,6 @@ namespace Delysoft.Apps.Usuario
                 default:
                     break;
             }
-            /*
-            else if (origen == "1")
-            {
-                Detail = new NavigationPage(new VistaPrevia(foo));
-            }
-            else if (origen == "2")
-            {
-                
-            }
-            else if (origen == "3")
-            {
-                Detail = new NavigationPage(new TabsRepartidor());
-            }
-            else if (origen == "4")
-            {
-                Detail = new NavigationPage(new DetallePedidoRepartidor(ped));
-            }
-            else if (origen == "5")
-            {
-                Detail = new NavigationPage(new PPrincipal());
-            }
-            */
             masterPage.ListView.ItemSelected += OnItemSelected;
         }
         void OnItemSelected(object sender, SelectedItemChangedEventArgs e)

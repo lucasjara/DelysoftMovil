@@ -8,8 +8,8 @@ using Xamarin.Forms;
 
 namespace Delysoft.Apps.Usuario.Pedido
 {
-	public class DetallePedido : ContentPage
-	{
+    public class DetallePedido : ContentPage
+    {
         public DetallePedido(PedidoViewModel ped)
         {
             // Elementos Titulo y Imagen
@@ -46,7 +46,16 @@ namespace Delysoft.Apps.Usuario.Pedido
             Label lbl_valor_Precio = new Label { Text = formatoPeso(ped.Precio), FontSize = 20 };
             Label lbl_valor_Total = new Label { Text = formatoPeso(ped.Total), FontSize = 20 };
             Label lbl_tipo_txt = new Label { Text = ped.TipoPago, FontSize = 20 };
-            Label lbl_estado_txt = new Label { Text = ped.EstadoPedido, FontSize = 20, Margin = new Thickness(0, 0, 0, 17) };
+            string valor = "";
+            if (ped.EstadoPedido.Substring(0, 3) == "Can")
+            {
+                valor = "Cancelado";
+            }
+            else
+            {
+                valor = ped.EstadoPedido;
+            }
+            Label lbl_estado_txt = new Label { Text = valor, FontSize = 20, Margin = new Thickness(0, 0, 0, 17) };
 
             stack_dos.Children.Add(lbl_Cantidad);
             stack_dos.Children.Add(lbl_cantidad_total);

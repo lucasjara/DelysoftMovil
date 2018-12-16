@@ -11,6 +11,8 @@ namespace Delysoft.Apps.Usuario.Tabs.Model
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
+        public string Region { get; set; }
+        public string Ciudad { get; set; }
         public string Imagen { get; set; }
     }
 }

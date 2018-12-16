@@ -1,35 +1,37 @@
-﻿using Delysoft.Apps.Usuario.Pedido.Model;
+﻿using Delysoft.Apps.Repartidor.Pedido;
+using Delysoft.Apps.Usuario.Pedido.Model;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 using Xamarin.Forms;
 
-namespace Delysoft.Apps.Usuario.Pedido
+namespace Delysoft.Apps.Repartidor.Tabs
 {
-    public class HistorialPedidos : ContentPage
+
+    public class ListadoPedidosRepartidor : ContentPage
     {
         public ObservableCollection<PedidoViewModel> pedido { get; set; }
-        public HistorialPedidos()
+
+        public ListadoPedidosRepartidor()
         {
             pedido = new ObservableCollection<PedidoViewModel>();
             ListView lstView = new ListView();
-            var stack = new StackLayout { Spacing = 0, BackgroundColor = Color.FromHex("#3C454F") };
-            Label lbl_titulo = new Label { Text = "Historial de Pedidos", FontSize = 20, HorizontalTextAlignment = TextAlignment.Center, TextColor = Color.White };
-            stack.Children.Add(lbl_titulo);
-            lstView.Header = stack;
             // ID que debemos obtener de la app
-            string id = Application.Current.Properties["id"] as string;
-            MetodosApi api = new MetodosApi();
-            var respuesta = JArray.Parse(api.ObtenerHistorialPedidos(id));
+            string id = "6";
+            var respuesta = JArray.Parse(ObtenerHistorialPedidos(id));
+            // var respuesta = JArray.Parse("[{'ID_'}]");
             if (respuesta[0].ToString() == "S")
             {
                 lstView.RowHeight = 60;
                 lstView.ItemTemplate = new DataTemplate(typeof(FormatoCelda));
                 JArray jsonString = JArray.Parse(respuesta[1].ToString());
+
                 foreach (JObject item in jsonString)
                 {
                     pedido.Add(new PedidoViewModel
@@ -47,19 +49,22 @@ namespace Delysoft.Apps.Usuario.Pedido
                         Fecha = item.GetValue("FECHA").ToString()
                     });
                 }
+                lstView.ItemsSource = pedido;
+                lstView.ItemTapped += async (object sender, ItemTappedEventArgs e) =>
+                {
+                    var content = e.Item as PedidoViewModel;
+
+                    await Navigation.PushModalAsync(new DetallePedidoRepartidor(content));
+                };
             }
             else
             {
                 lstView.RowHeight = 25;
                 lstView.ItemTemplate = new DataTemplate(typeof(SinFormato));
                 pedido.Add(new PedidoViewModel { NombreProducto = respuesta[1].ToString() });
+                lstView.ItemsSource = pedido;
             }
-            lstView.ItemsSource = pedido;
-            lstView.ItemTapped += async (object sender, ItemTappedEventArgs e) =>
-            {
-                var content = e.Item as PedidoViewModel;
-                await Navigation.PushModalAsync(new DetallePedido(content));
-            };
+
             Content = lstView;
         }
         public class FormatoCelda : ViewCell
@@ -69,22 +74,22 @@ namespace Delysoft.Apps.Usuario.Pedido
                 //instantiate each of our views
                 var imagen = new Image();
                 var titulo = new Label();
-                var fecha = new Label();
+                var estado_pedido = new Label();
                 var verticaLayout = new StackLayout();
                 var horizontalLayout = new StackLayout() { };
 
                 titulo.SetBinding(Label.TextProperty, new Binding("NombreProducto"));
-                fecha.SetBinding(Label.TextProperty, new Binding("Fecha"));
+                estado_pedido.SetBinding(Label.TextProperty, new Binding("EstadoPedido"));
                 imagen.SetBinding(Image.SourceProperty, new Binding("Imagen"));
 
                 imagen.HorizontalOptions = LayoutOptions.Start;
                 horizontalLayout.Orientation = StackOrientation.Horizontal;
                 horizontalLayout.HorizontalOptions = LayoutOptions.Fill;
                 titulo.FontSize = 20;
-                fecha.FontSize = 20;
+                estado_pedido.FontSize = 20;
 
                 verticaLayout.Children.Add(titulo);
-                verticaLayout.Children.Add(fecha);
+                verticaLayout.Children.Add(estado_pedido);
                 horizontalLayout.Children.Add(imagen);
                 horizontalLayout.Children.Add(verticaLayout);
 
@@ -108,5 +113,26 @@ namespace Delysoft.Apps.Usuario.Pedido
                 View = horizontalLayout;
             }
         }
+        private string ObtenerHistorialPedidos(string id)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_pedidos_pendientes_repartidor");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+
     }
 }

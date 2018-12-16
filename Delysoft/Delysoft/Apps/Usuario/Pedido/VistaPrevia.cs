@@ -10,6 +10,7 @@ namespace Delysoft.Apps.Usuario.Pedido
 {
     class VistaPrevia : ContentPage
     {
+
         // Declaracion Elementos Publicos
         Switch switcher = new Switch { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.CenterAndExpand };
         Switch switcher_dos = new Switch { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.CenterAndExpand };
@@ -204,5 +205,6 @@ namespace Delysoft.Apps.Usuario.Pedido
                 switcher.IsToggled = false;
             }
         }
+
     }
 }

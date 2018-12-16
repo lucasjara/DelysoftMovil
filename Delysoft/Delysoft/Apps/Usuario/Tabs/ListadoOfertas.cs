@@ -41,7 +41,7 @@ namespace Delysoft.Apps.Usuario.Tabs
                     var location = await Geolocation.GetLastKnownLocationAsync();
                     var latitude = location.Latitude;
                     var longitud = location.Longitude;
-                    
+
                     var respuesta = JArray.Parse(api.ObtenerListadoProductosDisponibles(id, latitude, longitud));
                     if (respuesta[0].ToString() == "S")
                     {
@@ -100,7 +100,7 @@ namespace Delysoft.Apps.Usuario.Tabs
             var origen = "VistaPrevia";
             await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, foo, null));
         }
-       
+
         private string dar_formato(string numero)
         {
             int numVal = Int32.Parse(numero);

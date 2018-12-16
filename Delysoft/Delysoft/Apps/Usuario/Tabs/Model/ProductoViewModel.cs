@@ -13,5 +13,7 @@ namespace Delysoft.Apps.Usuario.Tabs.Model
         public string Local { get; set; }
         public string Imagen { get; set; }
         public string ImagenProducto { get; set; }
+        public string ZonaProducto { get; set; }
+        public string EstadoProducto { get; set; }
     }
 }

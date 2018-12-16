@@ -1,4 +1,5 @@
-﻿using Delysoft.Apps.Usuario.Pedido.Model;
+﻿using Delysoft.Apps.Administrativo.Pedido;
+using Delysoft.Apps.Usuario.Pedido.Model;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,20 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace Delysoft.Apps.Usuario.Pedido
+namespace Delysoft.Apps.Administrativo.Tabs
 {
-    public class HistorialPedidos : ContentPage
+    public class ListadoPedidosAdministrativos : ContentPage
     {
         public ObservableCollection<PedidoViewModel> pedido { get; set; }
-        public HistorialPedidos()
+        public ListadoPedidosAdministrativos()
         {
             pedido = new ObservableCollection<PedidoViewModel>();
             ListView lstView = new ListView();
-            var stack = new StackLayout { Spacing = 0, BackgroundColor = Color.FromHex("#3C454F") };
-            Label lbl_titulo = new Label { Text = "Historial de Pedidos", FontSize = 20, HorizontalTextAlignment = TextAlignment.Center, TextColor = Color.White };
-            stack.Children.Add(lbl_titulo);
-            lstView.Header = stack;
             // ID que debemos obtener de la app
             string id = Application.Current.Properties["id"] as string;
             MetodosApi api = new MetodosApi();
-            var respuesta = JArray.Parse(api.ObtenerHistorialPedidos(id));
+            var respuesta = JArray.Parse(api.ObtenerPedidosAdministrativo(id));
+            // var respuesta = JArray.Parse("[{'ID_'}]");
             if (respuesta[0].ToString() == "S")
             {
                 lstView.RowHeight = 60;
@@ -44,7 +42,9 @@ namespace Delysoft.Apps.Usuario.Pedido
                         TipoPago = item.GetValue("TIPO_PAGO").ToString(),
                         Imagen = "mapa.jpg",
                         Observacion = item.GetValue("OBSERVACION").ToString(),
-                        Fecha = item.GetValue("FECHA").ToString()
+                        Fecha = item.GetValue("FECHA").ToString(),
+                        Longitud = item.GetValue("LONGITUD").ToString(),
+                        Latitud = item.GetValue("LATITUD").ToString()
                     });
                 }
             }
@@ -58,7 +58,7 @@ namespace Delysoft.Apps.Usuario.Pedido
             lstView.ItemTapped += async (object sender, ItemTappedEventArgs e) =>
             {
                 var content = e.Item as PedidoViewModel;
-                await Navigation.PushModalAsync(new DetallePedido(content));
+                await Navigation.PushModalAsync(new DetallePedidoAdministrativo(content));
             };
             Content = lstView;
         }
@@ -69,24 +69,30 @@ namespace Delysoft.Apps.Usuario.Pedido
                 //instantiate each of our views
                 var imagen = new Image();
                 var titulo = new Label();
-                var fecha = new Label();
+                var estado = new Label();
+                var total = new Label();
                 var verticaLayout = new StackLayout();
                 var horizontalLayout = new StackLayout() { };
 
                 titulo.SetBinding(Label.TextProperty, new Binding("NombreProducto"));
-                fecha.SetBinding(Label.TextProperty, new Binding("Fecha"));
+                estado.SetBinding(Label.TextProperty, new Binding("EstadoPedido"));
+                total.SetBinding(Label.TextProperty, new Binding("Total", stringFormat: "$ {0}"));
                 imagen.SetBinding(Image.SourceProperty, new Binding("Imagen"));
 
                 imagen.HorizontalOptions = LayoutOptions.Start;
+                total.VerticalOptions = LayoutOptions.Center;
+                total.HorizontalOptions = LayoutOptions.CenterAndExpand;
                 horizontalLayout.Orientation = StackOrientation.Horizontal;
                 horizontalLayout.HorizontalOptions = LayoutOptions.Fill;
                 titulo.FontSize = 20;
-                fecha.FontSize = 20;
+                estado.FontSize = 20;
+                total.FontSize = 20;
 
                 verticaLayout.Children.Add(titulo);
-                verticaLayout.Children.Add(fecha);
+                verticaLayout.Children.Add(estado);
                 horizontalLayout.Children.Add(imagen);
                 horizontalLayout.Children.Add(verticaLayout);
+                horizontalLayout.Children.Add(total);
 
                 View = horizontalLayout;
             }

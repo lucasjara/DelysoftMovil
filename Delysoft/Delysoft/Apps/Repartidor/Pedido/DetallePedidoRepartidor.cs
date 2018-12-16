@@ -1,22 +1,26 @@
-﻿using Delysoft.Apps.Usuario.Pedido.Model;
+﻿using Delysoft.Apps.Usuario.Pedido;
+using Delysoft.Apps.Usuario.Pedido.Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Xamarin.Essentials;
-
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 
-namespace Delysoft.Apps.Usuario.Pedido
+namespace Delysoft.Apps.Repartidor.Pedido
 {
-    public class DetallePedidoActivo : ContentPage
+    public class DetallePedidoRepartidor : ContentPage
     {
-        public DetallePedidoActivo(PedidoViewModel ped)
+        public string valor = "";
+        public string id_pedido = "";
+        public DetallePedidoRepartidor(PedidoViewModel ped)
         {
+            id_pedido = ped.IdPedido;
             // Elementos Titulo y Imagen
             var stack_uno = new StackLayout { VerticalOptions = LayoutOptions.Center };
-            var map = new Xamarin.Forms.Maps.Map();
 
             Label lbl_delyvery = new Label
             {
@@ -83,41 +87,83 @@ namespace Delysoft.Apps.Usuario.Pedido
             var stack_general_total = new StackLayout { Margin = new Thickness(10, 20, 10, 0), BackgroundColor = Color.White };
             stack_general_total.Children.Add(grid);
             stack_general.Children.Add(stack_general_total);
-            // Agregado si el estado es distinto de enviado
-            if (ped.EstadoPedido != "Enviado")
+
+            valor = ped.EstadoPedido;
+            string texto = "";
+            switch (valor)
             {
-                var stack_mapa = new StackLayout() { Spacing = 0 };
-                stack_mapa.Children.Remove(map);
-
-                Double latitud = Convert.ToDouble(ped.Latitud.Replace('.', ','));
-                Double longitud = Convert.ToDouble(ped.Longitud.Replace('.', ','));
-
-                map = new Xamarin.Forms.Maps.Map(MapSpan.FromCenterAndRadius(new Position(latitud, longitud), Distance.FromMiles(0.3)))
+                case "Enviado":
+                    texto = "En Camino";
+                    break;
+                case "En Camino":
+                    texto = "En Destino";
+                    break;
+                case "En Destino":
+                    texto = "Entregar";
+                    break;
+                default:
+                    texto = "";
+                    break;
+            }
+            Button btn_cambio_estado = new Button
+            {
+                Text = texto,
+                Margin = new Thickness(20, 0, 20, 0)
+            };
+            if (texto != "")
+            {
+                btn_cambio_estado.Clicked += async (sender, e) =>
                 {
-                    IsShowingUser = true,
-                    HeightRequest = 280,
-                    WidthRequest = 960,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                };
+                    var location = await Geolocation.GetLastKnownLocationAsync();
+                    var latitude = location.Latitude;
+                    var longitud = location.Longitude;
+                    var resultado = JArray.Parse(EnviarDatosPedido(ped.EstadoPedido, ped.IdPedido, latitude, longitud));
+                    if (resultado[0].ToString() == "S")
+                    {
+                        ped.EstadoPedido = resultado[1].ToString();
+                        await Navigation.PushModalAsync(new PaginaMaestraRepartidor("Cambio",null,null));
+                    }
+                    else
+                    {
+                        await DisplayAlert("Alerta", resultado[1].ToString(), "OK");
+                    }
 
-                var pin = new Pin
-                {
-                    //-38.733373, -72.615411
-                    Position = new Position(latitud, longitud),
-                    Label = "Ubicacion Repartidor",
-                    Type = PinType.SavedPin
                 };
-                map.Pins.Add(pin);
-                stack_mapa.Children.Add(map);
-                stack_general.Children.Add(stack_mapa);
+                stack_general.Children.Add(btn_cambio_estado);
             }
             // Contenido Vista
             var contentView = new ContentView
             {
                 Content = stack_general,
+                //ControlTemplate = pruebatemplate,
                 BackgroundColor = Color.FromHex("#E9E9E9")
             };
             Content = contentView;
+        }
+
+
+        string EnviarDatosPedido(string estado_pedido, string id_pedido, double latitud, double longitud)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("http://www.infest.cl/servicios/api/usuarios/cambiar_estado_pedido_repartidor/");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id_pedido", id_pedido },
+                        { "estado_pedido", estado_pedido },
+                        { "latitud",latitud.ToString()},
+                        { "longitud",longitud.ToString()}
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception ex)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
         }
 
         private string formatoPeso(string valor)
@@ -125,5 +171,7 @@ namespace Delysoft.Apps.Usuario.Pedido
             int numero = Int32.Parse(valor);
             return numero.ToString("C");
         }
+
+
     }
 }

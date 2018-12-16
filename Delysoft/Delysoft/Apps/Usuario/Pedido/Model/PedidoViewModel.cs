@@ -21,3 +21,4 @@ namespace Delysoft.Apps.Usuario.Pedido.Model
         public string Latitud { get; set; }
     }
 }
+

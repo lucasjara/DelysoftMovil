@@ -1,18 +1,18 @@
 ﻿using Delysoft.Apps.Usuario.Pedido.Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xamarin.Essentials;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace Delysoft.Apps.Usuario.Pedido
+namespace Delysoft.Apps.Administrativo.Pedido
 {
-    public class DetallePedidoActivo : ContentPage
+    public class DetallePedidoAdministrativo : ContentPage
     {
-        public DetallePedidoActivo(PedidoViewModel ped)
+        public DetallePedidoAdministrativo(PedidoViewModel ped)
         {
             // Elementos Titulo y Imagen
             var stack_uno = new StackLayout { VerticalOptions = LayoutOptions.Center };
@@ -83,33 +83,68 @@ namespace Delysoft.Apps.Usuario.Pedido
             var stack_general_total = new StackLayout { Margin = new Thickness(10, 20, 10, 0), BackgroundColor = Color.White };
             stack_general_total.Children.Add(grid);
             stack_general.Children.Add(stack_general_total);
-            // Agregado si el estado es distinto de enviado
-            if (ped.EstadoPedido != "Enviado")
+            // Asignar Repartidor dependiendo del estado
+            if (ped.EstadoPedido == "Creado")
             {
-                var stack_mapa = new StackLayout() { Spacing = 0 };
-                stack_mapa.Children.Remove(map);
-
-                Double latitud = Convert.ToDouble(ped.Latitud.Replace('.', ','));
-                Double longitud = Convert.ToDouble(ped.Longitud.Replace('.', ','));
-
-                map = new Xamarin.Forms.Maps.Map(MapSpan.FromCenterAndRadius(new Position(latitud, longitud), Distance.FromMiles(0.3)))
+                var stack_agregar_rechazar = new StackLayout() { Spacing = 0 };
+                var repartidorList = new List<string>();
+                repartidorList.Add("Leonardo");
+                repartidorList.Add("Victor");
+                var picker = new Picker { Title = "Selecciona un Repartidor", Margin = new Thickness(20, 5, 20, 0) };
+                picker.ItemsSource = repartidorList;
+                Button cmdSiguiente = new Button { Text = "Asignar Repartidor", BackgroundColor = Color.FromHex("#FF8800"), TextColor = Color.FromHex("#FFFFFF"), Margin = new Thickness(20, 10, 20, 0) };
+                Button cmdCancelar = new Button { Text = "Cancelar Pedido", BackgroundColor = Color.FromHex("#47525E"), TextColor = Color.FromHex("#FFFFFF"), Margin = new Thickness(20, 10, 20, 0) };
+                cmdSiguiente.Clicked += async (sender, e) =>
                 {
-                    IsShowingUser = true,
-                    HeightRequest = 280,
-                    WidthRequest = 960,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    string picker_val = picker.SelectedIndex.ToString();
+                    if (picker_val != "-1")
+                    {
+                        valor = "";
+                        switch (picker_val)
+                        {
+                            case "0":
+                                valor = "6";
+                                break;
+                            case "1":
+                                valor = "2";
+                                break;
+                        }
+                        MetodosApi api = new MetodosApi();
+                        string id = ped.IdPedido;
+                        var respuesta = JArray.Parse(api.CambiarEstadoPedidoAdministrativo(id, valor));
+                        if (respuesta[0].ToString() == "S")
+                        {
+                            await Navigation.PushModalAsync(new RecargaAdministrativo());
+                        }
+                        else
+                        {
+                            await DisplayAlert("Alerta", "Error al Procesar Cambio", "OK");
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Alerta", "Debe Seleccionar un Repartidor", "OK");
+                    }
                 };
-
-                var pin = new Pin
+                cmdCancelar.Clicked += async (sender, e) =>
                 {
-                    //-38.733373, -72.615411
-                    Position = new Position(latitud, longitud),
-                    Label = "Ubicacion Repartidor",
-                    Type = PinType.SavedPin
+                    MetodosApi api = new MetodosApi();
+                    string id = ped.IdPedido;
+                    var respuesta = JArray.Parse(api.CancelarPedidoAdministrativo(id));
+                    if (respuesta[0].ToString() == "S")
+                    {
+                        await Navigation.PushModalAsync(new RecargaAdministrativo());
+                    }
+                    else
+                    {
+                        await DisplayAlert("Alerta", "Error al Procesar Cambio", "OK");
+                    }
                 };
-                map.Pins.Add(pin);
-                stack_mapa.Children.Add(map);
-                stack_general.Children.Add(stack_mapa);
+                stack_agregar_rechazar.Children.Add(picker);
+                stack_agregar_rechazar.Children.Add(cmdSiguiente);
+                stack_agregar_rechazar.Children.Add(cmdCancelar);
+                stack_general.Children.Add(stack_agregar_rechazar);
+
             }
             // Contenido Vista
             var contentView = new ContentView
@@ -119,7 +154,6 @@ namespace Delysoft.Apps.Usuario.Pedido
             };
             Content = contentView;
         }
-
         private string formatoPeso(string valor)
         {
             int numero = Int32.Parse(valor);

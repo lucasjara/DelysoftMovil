@@ -110,7 +110,7 @@ namespace Delysoft.Apps
         }
         /*
          * Listado de Locales Favoritos del Usuario
-         */ 
+         */
         public string ObtenerListadoLocalesFavoritos(string id)
         {
             string respuestaString = "";
@@ -144,6 +144,169 @@ namespace Delysoft.Apps
                 NameValueCollection parametros = new NameValueCollection
                     {
                         { "id", id }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+         *  Metodo para obtener los datos del local en base al administrativo
+         */
+        public string ObtenerInformacionLocalAdministrativo(string id)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_informacion_local_administrativo");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+         *  Metodo para obtener los pedidos pendientes y sus estados del administrativo
+        */
+        public string ObtenerPedidosAdministrativo(string id)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_listado_pedidos_administrativo");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+         *  Metodo para Cambiar el Estado del Pedido a Asignado
+         */
+        public string CambiarEstadoPedidoAdministrativo(string id, string id_repartidor)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/asignar_repartidor_administrativo");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id_pedido", id },
+                        { "id_repartidor", id_repartidor }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+        *  Metodo para Cambiar el Estado del Pedido a Asignado
+        */
+        public string CancelarPedidoAdministrativo(string id_pedido)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/cancelar_pedido_administrativo");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id_pedido", id_pedido }
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+        * Listado de Locales Favoritos del Usuario
+        */
+        public string ObtenerListadoProductosLocal(string id_usuario)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_listado_productos_local");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id_usuario },
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+       * Listado de Locales Favoritos del Usuario
+       */
+        public string CambiarEstadoProductosLocal(string id_usuario, string estado_pedido)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/cambiar_estado_producto_local");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id_usuario },
+                        { "estado_pedido", estado_pedido },
+                    };
+                byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
+                respuestaString = Encoding.UTF8.GetString(respuestaByte);
+            }
+            catch (Exception)
+            {
+                respuestaString = "[\"N\",\"Error al Enviar la petición.\"]";
+            }
+            return respuestaString;
+        }
+        /*
+        * Listado de Locales Favoritos del Usuario
+        */
+        public string ObtenerUbicacionPedido(string id_usuario)
+        {
+            string respuestaString = "";
+            try
+            {
+                WebClient cliente = new WebClient();
+                Uri uri = new Uri("https://www.infest.cl/servicios/api/usuarios/obtener_ubicacion_pedido");
+                NameValueCollection parametros = new NameValueCollection
+                    {
+                        { "id", id_usuario },
                     };
                 byte[] respuestaByte = cliente.UploadValues(uri, "POST", parametros);
                 respuestaString = Encoding.UTF8.GetString(respuestaByte);

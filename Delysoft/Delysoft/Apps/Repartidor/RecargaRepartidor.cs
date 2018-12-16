@@ -5,11 +5,11 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace Delysoft.Apps.Usuario
+namespace Delysoft.Apps.Repartidor
 {
-    public class RecargaUsuario : ContentPage
+    public class RecargaRepartidor : ContentPage
     {
-        public RecargaUsuario()
+        public RecargaRepartidor()
         {
             string origen = "Cambio";
             CambioPantalla(origen);
@@ -17,7 +17,7 @@ namespace Delysoft.Apps.Usuario
 
         private async System.Threading.Tasks.Task CambioPantalla(string origen)
         {
-            await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, null, null));
+            await Navigation.PushModalAsync(new PaginaMaestraRepartidor(origen, null, null));
         }
     }
 }

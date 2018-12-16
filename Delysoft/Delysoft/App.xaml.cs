@@ -1,4 +1,5 @@
-﻿using Delysoft.Apps;
+﻿//using Com.OneSignal;
+using Delysoft.Apps;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,6 +12,7 @@ namespace Delysoft
         public App()
         {
             InitializeComponent();
+            //OneSignal.Current.StartInit("90a9d020-87d2-4dd4-9884-72b404d341b2").EndInit();
             MainPage = new Login();
         }
 

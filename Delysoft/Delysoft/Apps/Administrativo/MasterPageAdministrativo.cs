@@ -1,36 +1,35 @@
-﻿using Delysoft.Apps.Usuario.Pedido;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 using Xamarin.Forms;
 
-namespace Delysoft.Apps.Usuario
+namespace Delysoft.Apps.Administrativo
 {
-    public class MasterPage : ContentPage
+    public class MasterPageAdministrativo : ContentPage
     {
         public ListView ListView { get { return listView; } }
         ListView listView;
 
-        public MasterPage()
+        public MasterPageAdministrativo()
         {
-            var masterPageItems = new List<MasterPageItem>();
+            var masterPageItems = new List<MasterPageItemAdministrativo>();
 
-            masterPageItems.Add(new MasterPageItem
+            masterPageItems.Add(new MasterPageItemAdministrativo
             {
                 Title = "Inicio",
                 IconSource = "menu_100x100.png",
-                TargetType = typeof(RecargaUsuario)
+                TargetType = typeof(RecargaAdministrativo)
             });
-
-            masterPageItems.Add(new MasterPageItem
+            /*
+            masterPageItems.Add(new MasterPageItemAdministrativo
             {
                 Title = "Historial de Pedidos",
                 IconSource = "notificaciones2_100x100.png",
-                TargetType = typeof(HistorialPedidos)
+                TargetType = typeof(HistorialPedidosRepartidor)
             });
-
+            */
             listView = new ListView
             {
                 ItemsSource = masterPageItems,
@@ -47,7 +46,7 @@ namespace Delysoft.Apps.Usuario
 
             Padding = new Thickness(0, 0, 0, 0);
             Icon = "menu_opciones_24x24.png";
-            Title = "Opciones";
+            Title = "Opciones Administrativo";
             Label lbl_nombre = new Label
             {
                 Text = Title,

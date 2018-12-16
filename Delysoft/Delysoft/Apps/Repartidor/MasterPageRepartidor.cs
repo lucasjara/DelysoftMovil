@@ -1,34 +1,33 @@
-﻿using Delysoft.Apps.Usuario.Pedido;
+﻿using Delysoft.Apps.Repartidor.Pedido;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-
 using Xamarin.Forms;
 
-namespace Delysoft.Apps.Usuario
+namespace Delysoft.Apps.Repartidor
 {
-    public class MasterPage : ContentPage
+
+    public class MasterPageRepartidor : ContentPage
     {
         public ListView ListView { get { return listView; } }
         ListView listView;
 
-        public MasterPage()
+        public MasterPageRepartidor()
         {
-            var masterPageItems = new List<MasterPageItem>();
+            var masterPageItems = new List<MasterPageItemRepartidor>();
 
-            masterPageItems.Add(new MasterPageItem
+            masterPageItems.Add(new MasterPageItemRepartidor
             {
                 Title = "Inicio",
                 IconSource = "menu_100x100.png",
-                TargetType = typeof(RecargaUsuario)
+                TargetType = typeof(RecargaRepartidor)
             });
 
-            masterPageItems.Add(new MasterPageItem
+            masterPageItems.Add(new MasterPageItemRepartidor
             {
                 Title = "Historial de Pedidos",
                 IconSource = "notificaciones2_100x100.png",
-                TargetType = typeof(HistorialPedidos)
+                TargetType = typeof(HistorialPedidosRepartidor)
             });
 
             listView = new ListView
@@ -47,7 +46,7 @@ namespace Delysoft.Apps.Usuario
 
             Padding = new Thickness(0, 0, 0, 0);
             Icon = "menu_opciones_24x24.png";
-            Title = "Opciones";
+            Title = "Opciones Repartidor";
             Label lbl_nombre = new Label
             {
                 Text = Title,
@@ -78,4 +77,5 @@ namespace Delysoft.Apps.Usuario
             await this.Navigation.PushModalAsync(new Login());
         }
     }
+
 }

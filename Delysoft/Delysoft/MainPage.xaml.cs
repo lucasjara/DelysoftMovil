@@ -1,4 +1,5 @@
-﻿using System;
+﻿//using Com.OneSignal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Delysoft
         public MainPage()
         {
             InitializeComponent();
+            //OneSignal.Current.StartInit("90a9d020-87d2-4dd4-9884-72b404d341b2").EndInit();
         }
     }
 }

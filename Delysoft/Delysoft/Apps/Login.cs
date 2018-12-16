@@ -1,4 +1,6 @@
-﻿using Delysoft.Apps.Usuario;
+﻿using Delysoft.Apps.Administrativo;
+using Delysoft.Apps.Repartidor;
+using Delysoft.Apps.Usuario;
 using ImageCircle.Forms.Plugin.Abstractions;
 using Newtonsoft.Json.Linq;
 using System;
@@ -33,24 +35,35 @@ namespace Delysoft.Apps
             cmdIniciarSesion.Clicked += async (sender, e) =>
             {
                 MetodosApi api = new MetodosApi();
-
+                
                 string username = ent_username.Text;
                 string passuser = ent_userpass.Text;
 
                 var respuesta = JArray.Parse(api.ValidarAcceso(username, passuser));
                 if (respuesta[0].ToString() == "S")
                 {
-                    // Obtenemos el ID
-                    Application.Current.Properties["id"]= respuesta[2].ToString();
-                    var origen = "Login";
-
-                    await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, null,null));
+                
+                // Obtenemos el ID
+                Application.Current.Properties["id"]= respuesta[2].ToString();
+                var origen = "Login";
+                    switch (respuesta[2].ToString()) {
+                        case "1":
+                            await Navigation.PushModalAsync(new PaginaMaestraAdministrativo(origen, null, null));
+                            break;
+                        case "2":
+                            await Navigation.PushModalAsync(new PaginaMaestraUsuario(origen, null, null));
+                            break;
+                        case "6":
+                            await Navigation.PushModalAsync(new PaginaMaestraRepartidor(origen, null, null));
+                            break;
+                    }
                 }
                 else
                 {
                     await DisplayAlert("LOGIN", respuesta[1].ToString(), "OK");
                 }
                 
+
             };
             ent_userpass.Completed += (object sender, EventArgs e) =>
             {
